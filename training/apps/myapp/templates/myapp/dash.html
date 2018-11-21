@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <title></title>
+  </head>
+  <body>
+      <h1>Welcome {{user.name}}!</h1>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">Trips</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="/dash">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/logout">Logout</a>
+      </li>
+    </ul>
+
+    <a href="/new">  <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Add Travel Plan</button></a>
+
+  </div>
+</nav>
+<br>
+<h2>Your Trip Schdules</h2>
+<table class="table table-hover">
+  <thead>
+    <tr class="table-primary">
+      <th scope="col">Destination</th>
+      <th scope="col">Travel Start Date</th>
+      <th scope="col">Travel End Date</th>
+      <th scope="col">Description</th>
+      <th scope="col">Delete/Cancel</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      {%for trip in mytrips%}
+      <td><a href="/show/{{trip.id}}">{{trip.destination}}</a></td>
+      <td>{{trip.travel_start_date}}</td>
+      <td>{{trip.travel_end_date}}</td>
+      <td>{{trip.plan}}</td>
+      <td>
+        {% if trip.creater.id == request.session.user_id %}
+        <a href="/delete/{{trip.id}}"><button class="btn btn-danger"> Delete </button></a>
+        {%else%}
+        <a href="/cancel/{{trip.id}}"><button class="btn btn-warning"> Cancel </button></a>
+        {%endif%}
+      </td>
+    </tr>
+    {%endfor%}
+  </tbody>
+</table>
+<h2>Other User's Travel Plans</h2>
+  <table class="table table-hover">
+    <!-- <thead class="thead-dark"> -->
+      <tr class="table-success">
+        <th scope="col">Name</th>
+        <th scope="col">Destination</th>
+        <th scope="col">Travel Start Date</th>
+        <th scope="col">Travel End Date</th>
+        <th scope="col">Description</th>
+        <th scope="col">Join</th>
+      </tr>
+    </thead>
+    {% for trip in trips %}
+    <tr>
+      <td>{{trip.creater.name}}</td>
+      <td><a href="/show/{{trip.id}}">{{ trip.destination }}</a></td>
+      <td>{{ trip.travel_start_date }}</td>
+      <td>{{ trip.travel_end_date}}</td>
+      <td>{{ trip.plan}}</td>
+      <td>
+      <a href="/join/{{trip.id}}"><button class="btn btn-success">Join</button></a>
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+
+  </body>
+</html>
